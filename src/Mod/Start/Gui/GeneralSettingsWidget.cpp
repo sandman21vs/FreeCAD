@@ -124,6 +124,16 @@ gsl::owner<QComboBox*> GeneralSettingsWidget::createLanguageComboBox()
             langname = native;
         }
 
+        // Qt's nativeLanguageName() reports the two Portuguese variants asymmetrically
+        // ("Português europeu" for pt-PT and plain "Português" for pt-BR). Override them so
+        // both are disambiguated by country.
+        if (it->second == "pt-PT") {
+            langname = QString::fromUtf8("Português (Portugal)");
+        }
+        else if (it->second == "pt-BR") {
+            langname = QString::fromUtf8("Português (Brasil)");
+        }
+
         comboBox->addItem(langname, lang);
         if (language == lang) {
             comboBox->setCurrentIndex(index);
